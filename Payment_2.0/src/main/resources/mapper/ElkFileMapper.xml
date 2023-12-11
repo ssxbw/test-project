@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payment.mapper.ElkFileMapper">
+
+    <resultMap type="com.payment.pojo.ElkFile" id="ElkFileResult">
+        <result property="id"    column="id"    />
+        <result property="url"    column="url"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="newName"    column="new_name"    />
+        <result property="oldName"    column="old_name"    />
+        <result property="docId"    column="doc_id"    />
+        <result property="isDel"    column="is_del"    />
+        <result property="isElk"    column="is_elk"    />
+        <result property="fileSize"    column="file_size"    />
+        <result property="pdfurl"    column="pdfurl"    />
+    </resultMap>
+
+    <sql id="selectElkFileVo">
+        select id, url, file_name, new_name, old_name, doc_id, is_del, is_elk, file_size, pdfurl from elk_file
+    </sql>
+
+    <select id="selectElkFileList" parameterType="com.payment.pojo.ElkFile" resultMap="ElkFileResult">
+        <include refid="selectElkFileVo"/>
+        <where>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="newName != null  and newName != ''"> and new_name like concat('%', #{newName}, '%')</if>
+            <if test="oldName != null  and oldName != ''"> and old_name like concat('%', #{oldName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectElkFileById" parameterType="Integer" resultMap="ElkFileResult">
+        <include refid="selectElkFileVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertElkFile" parameterType="com.payment.pojo.ElkFile" useGeneratedKeys="true" keyProperty="id">
+        insert into elk_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="url != null">url,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="newName != null">new_name,</if>
+            <if test="oldName != null">old_name,</if>
+            <if test="docId != null">doc_id,</if>
+            <if test="isDel != null">is_del,</if>
+            <if test="isElk != null">is_elk,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="pdfurl != null">pdfurl,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="url != null">#{url},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="newName != null">#{newName},</if>
+            <if test="oldName != null">#{oldName},</if>
+            <if test="docId != null">#{docId},</if>
+            <if test="isDel != null">#{isDel},</if>
+            <if test="isElk != null">#{isElk},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="pdfurl != null">#{pdfurl},</if>
+        </trim>
+    </insert>
+
+    <update id="updateElkFile" parameterType="com.payment.pojo.ElkFile">
+        update elk_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="url != null">url = #{url},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="newName != null">new_name = #{newName},</if>
+            <if test="oldName != null">old_name = #{oldName},</if>
+            <if test="docId != null">doc_id = #{docId},</if>
+            <if test="isDel != null">is_del = #{isDel},</if>
+            <if test="isElk != null">is_elk = #{isElk},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="pdfurl != null">pdfurl = #{pdfurl},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteElkFileById" parameterType="Integer">
+        delete from elk_file where id = #{id}
+    </delete>
+
+    <delete id="deleteElkFileByIds" parameterType="String">
+        delete from elk_file where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

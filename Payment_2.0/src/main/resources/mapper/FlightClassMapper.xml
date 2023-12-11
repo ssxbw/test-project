@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payment.mapper.FlightClassMapper">
+
+    <resultMap type="com.payment.pojo.FlightClass" id="FlightClassResult">
+        <result property="classId"    column="class_id"    />
+        <result property="flightId"    column="flight_id"    />
+        <result property="cabin"    column="cabin"    />
+        <result property="price"    column="price"    />
+        <result property="discount"    column="discount"    />
+        <result property="fileIds"    column="fileIds"    />
+    </resultMap>
+
+    <sql id="selectFlightClassVo">
+        select class_id, flight_id, cabin, price, discount,fileIds,stock_0, stock_1, stock_2, stock_3, stock_4, stock_5, stock_6, stock_7, stock_8, stock_9, stock_10, stock_11, stock_12, stock_13, stock_14 from flight_class
+    </sql>
+
+    <select id="selectFlightClassList" parameterType="com.payment.pojo.FlightClass" resultMap="FlightClassResult">
+        <include refid="selectFlightClassVo"/>
+        <where>
+            <if test="flightId != null "> and flight_id = #{flightId}</if>
+            <if test="cabin != null  and cabin != ''"> and cabin = #{cabin}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="discount != null  and discount != ''"> and discount = #{discount}</if>
+        </where>
+    </select>
+
+    <select id="selectFlightClassByClassId" parameterType="Long" resultMap="FlightClassResult">
+        <include refid="selectFlightClassVo"/>
+        where class_id = #{classId}
+    </select>
+
+    <insert id="insertFlightClass" parameterType="com.payment.pojo.FlightClass" useGeneratedKeys="true" keyProperty="classId">
+        insert into flight_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="classId != null">class_id,</if>
+            <if test="flightId != null">flight_id,</if>
+            <if test="cabin != null">cabin,</if>
+            <if test="price != null">price,</if>
+            <if test="discount != null">discount,</if>
+            <if test="fileIds != null">fileIds,</if>
+            <if test="stock0 != null">stock_0,</if>
+            <if test="stock1 != null">stock_1,</if>
+            <if test="stock2 != null">stock_2,</if>
+            <if test="stock3 != null">stock_3,</if>
+            <if test="stock4 != null">stock_4,</if>
+            <if test="stock5 != null">stock_5,</if>
+            <if test="stock6 != null">stock_6,</if>
+            <if test="stock7 != null">stock_7,</if>
+            <if test="stock8 != null">stock_8,</if>
+            <if test="stock9 != null">stock_9,</if>
+            <if test="stock10 != null">stock_10,</if>
+            <if test="stock11 != null">stock_11,</if>
+            <if test="stock12 != null">stock_12,</if>
+            <if test="stock13 != null">stock_13,</if>
+            <if test="stock14 != null">stock_14,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="classId != null">#{classId},</if>
+            <if test="flightId != null">#{flightId},</if>
+            <if test="cabin != null">#{cabin},</if>
+            <if test="price != null">#{price},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="fileIds != null">#{fileIds},</if>
+            <if test="stock0 != null">#{stock0},</if>
+            <if test="stock1 != null">#{stock1},</if>
+            <if test="stock2 != null">#{stock2},</if>
+            <if test="stock3 != null">#{stock3},</if>
+            <if test="stock4 != null">#{stock4},</if>
+            <if test="stock5 != null">#{stock5},</if>
+            <if test="stock6 != null">#{stock6},</if>
+            <if test="stock7 != null">#{stock7},</if>
+            <if test="stock8 != null">#{stock8},</if>
+            <if test="stock9 != null">#{stock9},</if>
+            <if test="stock10 != null">#{stock10},</if>
+            <if test="stock11 != null">#{stock11},</if>
+            <if test="stock12 != null">#{stock12},</if>
+            <if test="stock13 != null">#{stock13},</if>
+            <if test="stock14 != null">#{stock14},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFlightClass" parameterType="com.payment.pojo.FlightClass">
+        update flight_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="flightId != null">flight_id = #{flightId},</if>
+            <if test="cabin != null">cabin = #{cabin},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="fileIds != null">fileIds = #{fileIds},</if>
+        </trim>
+        where class_id = #{classId}
+    </update>
+
+    <delete id="deleteFlightClassByClassId" parameterType="Long">
+        delete from flight_class where class_id = #{classId}
+    </delete>
+
+    <delete id="deleteFlightClassByClassIds" parameterType="String">
+        delete from flight_class where class_id in
+        <foreach item="classId" collection="array" open="(" separator="," close=")">
+            #{classId}
+        </foreach>
+    </delete>
+
+    <select id="getMaxId" resultType="Long">
+        SELECT MAX(class_id) FROM flight_class
+    </select>
+</mapper>

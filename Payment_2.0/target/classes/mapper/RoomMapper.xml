@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payment.mapper.RoomMapper">
+
+    <resultMap type="com.payment.pojo.Room" id="RoomResult">
+        <result property="roomId"    column="room_id"    />
+        <result property="hotelId"    column="hotel_id"    />
+        <result property="type"    column="type"    />
+        <result property="price"    column="price"    />
+        <result property="discount"    column="discount"    />
+        <result property="area"    column="area"    />
+        <result property="stock0"    column="stock_0"    />
+        <result property="stock1"    column="stock_1"    />
+        <result property="stock2"    column="stock_2"    />
+        <result property="stock3"    column="stock_3"    />
+        <result property="stock4"    column="stock_4"    />
+        <result property="stock5"    column="stock_5"    />
+        <result property="stock6"    column="stock_6"    />
+        <result property="stock7"    column="stock_7"    />
+        <result property="stock8"    column="stock_8"    />
+        <result property="stock9"    column="stock_9"    />
+        <result property="stock10"    column="stock_10"    />
+        <result property="stock11"    column="stock_11"    />
+        <result property="stock12"    column="stock_12"    />
+        <result property="stock13"    column="stock_13"    />
+        <result property="stock14"    column="stock_14"    />
+        <result property="fileIds"    column="fileIds"    />
+    </resultMap>
+
+    <sql id="selectRoomVo">
+        select room_id, hotel_id, type, price, discount, area, stock_0, stock_1, stock_2, stock_3, stock_4, stock_5, stock_6, stock_7, stock_8, stock_9, stock_10, stock_11, stock_12, stock_13, stock_14,fileIds from room
+    </sql>
+
+    <select id="selectRoomList" parameterType="com.payment.pojo.Room" resultMap="RoomResult">
+        <include refid="selectRoomVo"/>
+        <where>
+            <if test="hotelId != null "> and hotel_id = #{hotelId}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="price != null  and price != ''"> and price = #{price}</if>
+            <if test="discount != null  and discount != ''"> and discount = #{discount}</if>
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+            <if test="stock0 != null "> and stock_0 > #{stock0}</if>
+            <if test="stock1 != null "> and stock_1 > #{stock1}</if>
+            <if test="stock2 != null "> and stock_2 > #{stock2}</if>
+            <if test="stock3 != null "> and stock_3 > #{stock3}</if>
+            <if test="stock4 != null "> and stock_4 > #{stock4}</if>
+            <if test="stock5 != null "> and stock_5 > #{stock5}</if>
+            <if test="stock6 != null "> and stock_6 > #{stock6}</if>
+            <if test="stock7 != null "> and stock_7 > #{stock7}</if>
+            <if test="stock8 != null "> and stock_8 > #{stock8}</if>
+            <if test="stock9 != null "> and stock_9 > #{stock9}</if>
+            <if test="stock10 != null "> and stock_10 > #{stock10}</if>
+            <if test="stock11 != null "> and stock_11 > #{stock11}</if>
+            <if test="stock12 != null "> and stock_12 > #{stock12}</if>
+            <if test="stock13 != null "> and stock_13 > #{stock13}</if>
+            <if test="stock14 != null "> and stock_14 > #{stock14}</if>
+        </where>
+    </select>
+
+    <select id="selectRoomByRoomId" parameterType="Integer" resultMap="RoomResult">
+        <include refid="selectRoomVo"/>
+        where room_id = #{roomId}
+    </select>
+
+    <insert id="insertRoom" parameterType="com.payment.pojo.Room" useGeneratedKeys="true" keyProperty="roomId">
+        insert into room
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">room_id,</if>
+            <if test="hotelId != null">hotel_id,</if>
+            <if test="type != null">type,</if>
+            <if test="price != null">price,</if>
+            <if test="discount != null">discount,</if>
+            <if test="area != null">area,</if>
+            <if test="stock0 != null">stock_0,</if>
+            <if test="stock1 != null">stock_1,</if>
+            <if test="stock2 != null">stock_2,</if>
+            <if test="stock3 != null">stock_3,</if>
+            <if test="stock4 != null">stock_4,</if>
+            <if test="stock5 != null">stock_5,</if>
+            <if test="stock6 != null">stock_6,</if>
+            <if test="stock7 != null">stock_7,</if>
+            <if test="stock8 != null">stock_8,</if>
+            <if test="stock9 != null">stock_9,</if>
+            <if test="stock10 != null">stock_10,</if>
+            <if test="stock11 != null">stock_11,</if>
+            <if test="stock12 != null">stock_12,</if>
+            <if test="stock13 != null">stock_13,</if>
+            <if test="stock14 != null">stock_14,</if>
+            <if test="fileIds != null">fileIds,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomId != null">#{roomId},</if>
+            <if test="hotelId != null">#{hotelId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="price != null">#{price},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="area != null">#{area},</if>
+            <if test="stock0 != null">#{stock0},</if>
+            <if test="stock1 != null">#{stock1},</if>
+            <if test="stock2 != null">#{stock2},</if>
+            <if test="stock3 != null">#{stock3},</if>
+            <if test="stock4 != null">#{stock4},</if>
+            <if test="stock5 != null">#{stock5},</if>
+            <if test="stock6 != null">#{stock6},</if>
+            <if test="stock7 != null">#{stock7},</if>
+            <if test="stock8 != null">#{stock8},</if>
+            <if test="stock9 != null">#{stock9},</if>
+            <if test="stock10 != null">#{stock10},</if>
+            <if test="stock11 != null">#{stock11},</if>
+            <if test="stock12 != null">#{stock12},</if>
+            <if test="stock13 != null">#{stock13},</if>
+            <if test="stock14 != null">#{stock14},</if>
+            <if test="fileIds != null">#{fileIds},</if>
+        </trim>
+    </insert>
+
+    <update id="updateRoom" parameterType="com.payment.pojo.Room">
+        update room
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hotelId != null">hotel_id = #{hotelId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="stock0 != null">stock_0 = #{stock0},</if>
+            <if test="stock1 != null">stock_1 = #{stock1},</if>
+            <if test="stock2 != null">stock_2 = #{stock2},</if>
+            <if test="stock3 != null">stock_3 = #{stock3},</if>
+            <if test="stock4 != null">stock_4 = #{stock4},</if>
+            <if test="stock5 != null">stock_5 = #{stock5},</if>
+            <if test="stock6 != null">stock_6 = #{stock6},</if>
+            <if test="stock7 != null">stock_7 = #{stock7},</if>
+            <if test="stock8 != null">stock_8 = #{stock8},</if>
+            <if test="stock9 != null">stock_9 = #{stock9},</if>
+            <if test="stock10 != null">stock_10 = #{stock10},</if>
+            <if test="stock11 != null">stock_11 = #{stock11},</if>
+            <if test="stock12 != null">stock_12 = #{stock12},</if>
+            <if test="stock13 != null">stock_13 = #{stock13},</if>
+            <if test="stock14 != null">stock_14 = #{stock14},</if>
+            <if test="fileIds != null">fileIds = #{fileIds},</if>
+        </trim>
+        where room_id = #{roomId}
+    </update>
+
+    <delete id="deleteRoomByRoomId" parameterType="Integer">
+        delete from room where room_id = #{roomId}
+    </delete>
+
+    <delete id="deleteRoomByRoomIds" parameterType="String">
+        delete from room where room_id in
+        <foreach item="roomId" collection="array" open="(" separator="," close=")">
+            #{roomId}
+        </foreach>
+    </delete>
+
+    <select id="getMaxId" resultType="Integer">
+        SELECT MAX(room_id) FROM room
+    </select>
+</mapper>

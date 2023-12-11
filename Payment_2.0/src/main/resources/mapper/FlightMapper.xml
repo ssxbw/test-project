@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payment.mapper.FlightMapper">
+
+    <resultMap type="com.payment.pojo.Flight" id="FlightResult">
+        <result property="flightId"    column="flight_id"    />
+        <result property="flightNumber"    column="flight_number"    />
+        <result property="departureTime"    column="departure_time"    />
+        <result property="arrivalTime"    column="arrival_time"    />
+        <result property="departureAirport"    column="departure_airport"    />
+        <result property="arrivalAirport"    column="arrival_airport"    />
+        <result property="minPrice"    column="min_price"    />
+        <result property="discount"    column="discount"    />
+        <result property="company"    column="company"    />
+        <result property="fileIds"    column="fileIds"    />
+    </resultMap>
+
+    <sql id="selectFlightVo">
+        select flight_id, flight_number, departure_time, arrival_time, departure_airport, arrival_airport, min_price, discount, company,fileIds from flight
+    </sql>
+
+    <select id="selectFlightList" parameterType="com.payment.pojo.Flight" resultMap="FlightResult">
+        <include refid="selectFlightVo"/>
+        <where>
+            <if test="flightNumber != null  and flightNumber != ''"> and flight_number = #{flightNumber}</if>
+            <if test="departureTime != null "> and departure_time &gt;= #{departureTime}</if>
+            <if test="arrivalTime != null "> and arrival_time &lt;= #{arrivalTime}</if>
+            <if test="departureAirport != null  and departureAirport != ''"> and departure_airport like concat('%', #{departureAirport}, '%')</if>
+            <if test="arrivalAirport != null  and arrivalAirport != ''"> and arrival_airport like concat('%', #{arrivalAirport}, '%')</if>
+            <if test="minPrice != null  and minPrice != ''"> and min_price = #{minPrice}</if>
+            <if test="discount != null  and discount != ''"> and discount = #{discount}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+        </where>
+    </select>
+
+    <select id="selectFlightByFlightId" parameterType="Long" resultMap="FlightResult">
+        <include refid="selectFlightVo"/>
+        where flight_id = #{flightId}
+    </select>
+
+    <insert id="insertFlight" parameterType="com.payment.pojo.Flight" useGeneratedKeys="true" keyProperty="flightId">
+        insert into flight
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="flightNumber != null">flight_number,</if>
+            <if test="departureTime != null">departure_time,</if>
+            <if test="arrivalTime != null">arrival_time,</if>
+            <if test="departureAirport != null">departure_airport,</if>
+            <if test="arrivalAirport != null">arrival_airport,</if>
+            <if test="minPrice != null">min_price,</if>
+            <if test="discount != null">discount,</if>
+            <if test="company != null">company,</if>
+            <if test="fileIds != null">fileIds,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="flightNumber != null">#{flightNumber},</if>
+            <if test="departureTime != null">#{departureTime},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="departureAirport != null">#{departureAirport},</if>
+            <if test="arrivalAirport != null">#{arrivalAirport},</if>
+            <if test="minPrice != null">#{minPrice},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="company != null">#{company},</if>
+            <if test="fileIds != null">#{fileIds},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFlight" parameterType="com.payment.pojo.Flight">
+        update flight
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="flightNumber != null">flight_number = #{flightNumber},</if>
+            <if test="departureTime != null">departure_time = #{departureTime},</if>
+            <if test="arrivalTime != null">arrival_time = #{arrivalTime},</if>
+            <if test="departureAirport != null">departure_airport = #{departureAirport},</if>
+            <if test="arrivalAirport != null">arrival_airport = #{arrivalAirport},</if>
+            <if test="minPrice != null">min_price = #{minPrice},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="fileIds != null">fileIds = #{fileIds},</if>
+        </trim>
+        where flight_id = #{flightId}
+    </update>
+
+    <delete id="deleteFlightByFlightId" parameterType="Long">
+        delete from flight where flight_id = #{flightId}
+    </delete>
+
+    <delete id="deleteFlightByFlightIds" parameterType="String">
+        delete from flight where flight_id in
+        <foreach item="flightId" collection="array" open="(" separator="," close=")">
+            #{flightId}
+        </foreach>
+    </delete>
+</mapper>

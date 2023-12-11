@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payment.mapper.HotelMapper">
+
+    <resultMap type="com.payment.pojo.Hotel" id="HotelResult">
+        <result property="hotelId"    column="hotel_id"    />
+        <result property="rating"    column="rating"    />
+        <result property="name"    column="name"    />
+        <result property="address"    column="address"    />
+        <result property="discount"    column="discount"    />
+        <result property="star"    column="star"    />
+        <result property="minPrice"    column="min_price"    />
+        <result property="fileIds"    column="fileIds"    />
+    </resultMap>
+
+    <sql id="selectHotelVo">
+        select hotel_id, rating, name, address, discount, star, min_price,fileIds from hotel
+    </sql>
+
+    <select id="selectHotelList" parameterType="com.payment.pojo.Hotel" resultMap="HotelResult">
+        <include refid="selectHotelVo"/>
+        <where>
+            <if test="rating != null  and rating != ''"> and rating = #{rating}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
+            <if test="discount != null  and discount != ''"> and discount = #{discount}</if>
+            <if test="star != null "> and star = #{star}</if>
+            <if test="minPrice != null  and minPrice != ''"> and min_price = #{minPrice}</if>
+            <if test="hotelId != null  and hotelId != ''"> and hotelId in
+                <foreach item="hotelId" collection="array" open="(" separator="," close=")">
+                    #{hotelIds}
+                </foreach>
+            </if>
+
+        </where>
+    </select>
+
+    <select id="selectHotelByHotelId" parameterType="Long" resultMap="HotelResult">
+        <include refid="selectHotelVo"/>
+        where hotel_id = #{hotelId}
+    </select>
+
+    <insert id="insertHotel" parameterType="com.payment.pojo.Hotel" useGeneratedKeys="true" keyProperty="hotelId">
+        insert into hotel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rating != null">rating,</if>
+            <if test="name != null">name,</if>
+            <if test="address != null">address,</if>
+            <if test="discount != null">discount,</if>
+            <if test="star != null">star,</if>
+            <if test="minPrice != null">min_price,</if>
+            <if test="fileIds != null">fileIds,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rating != null">#{rating},</if>
+            <if test="name != null">#{name},</if>
+            <if test="address != null">#{address},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="star != null">#{star},</if>
+            <if test="minPrice != null">#{minPrice},</if>
+            <if test="fileIds != null">#{fileIds},</if>
+        </trim>
+    </insert>
+
+    <update id="updateHotel" parameterType="com.payment.pojo.Hotel">
+        update hotel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rating != null">rating = #{rating},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="star != null">star = #{star},</if>
+            <if test="minPrice != null">min_price = #{minPrice},</if>
+            <if test="fileIds != null">fileIds = #{fileIds},</if>
+        </trim>
+        where hotel_id = #{hotelId}
+    </update>
+
+    <delete id="deleteHotelByHotelId" parameterType="Long">
+        delete from hotel where hotel_id = #{hotelId}
+    </delete>
+
+    <delete id="deleteHotelByHotelIds" parameterType="String">
+        delete from hotel where hotel_id in
+        <foreach item="hotelId" collection="array" open="(" separator="," close=")">
+            #{hotelId}
+        </foreach>
+    </delete>
+</mapper>

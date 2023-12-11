@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.payment.mapper.IOrderMapper">
+
+
+
+    <select id="findjdListByUserId" parameterType="String" resultType="com.payment.pojo.UserOrder">
+        SELECT
+            a.order_id as "orderId",
+            a.buyer_id as "buyerId",
+            a.seller_id as "sellerId",
+            a.total_price as "totalPrice",
+            a.item_id as "itemId",
+            a.order_state as "orderState",
+            b.type as "itemName",
+            d.`name`  as "sellerName"
+        FROM
+            user_order a
+                LEFT JOIN room b ON a.item_id = b.room_id
+                LEFT JOIN transaction_flow c ON a.order_id = c.order_id
+                LEFT JOIN hotel d ON b.hotel_id = d.hotel_id
+        WHERE
+            a.buyer_id = #{userId}
+          AND c.create_time &gt;= #{beginDate}
+          AND c.create_time &lt;= #{endDate}
+          and a.seller_id = 90001
+          AND c.order_State = 3
+    </select>
+
+    <select id="findhbListByUserId" parameterType="String" resultType="com.payment.pojo.UserOrder">
+        SELECT
+            a.order_id as "orderId",
+            a.buyer_id as "buyerId",
+            a.seller_id as "sellerId",
+            a.total_price as "totalPrice",
+            a.item_id as "itemId",
+            a.order_state as "orderState",
+            b.cabin as "itemName",
+            d.`company`  as "sellerName",
+            d.departure_time as "departureTime"
+        FROM
+            user_order a
+                LEFT JOIN flight_class b ON a.item_id = b.class_id
+                LEFT JOIN transaction_flow c ON a.order_id = c.order_id
+                LEFT JOIN flight d ON b.flight_id = d.flight_id
+        WHERE
+            a.buyer_id = #{userId}
+          AND c.create_time &gt;= #{beginDate}
+          AND c.create_time &lt;= #{endDate}
+          and a.seller_id = 90002
+          AND c.order_state = 3
+    </select>
+
+    <select id="findjdListBySellerIdAndOrderState" parameterType="int" resultType="com.payment.pojo.UserOrder">
+        SELECT
+            a.order_id as "orderId",
+            a.buyer_id as "buyerId",
+            a.seller_id as "sellerId",
+            a.total_price as "totalPrice",
+            a.item_id as "itemId",
+            a.order_state as "orderState",
+            b.type as "itemName",
+            d.`name`  as "sellerName"
+        FROM
+            user_order a
+                LEFT JOIN room b ON a.item_id = b.room_id
+                LEFT JOIN transaction_flow c ON a.order_id = c.order_id
+                LEFT JOIN hotel d ON b.hotel_id = d.hotel_id
+        WHERE
+            a.seller_id = #{sellerId}
+          and  a.order_state = 3
+    </select>
+
+    <select id="findhbListBySellerIdAndOrderState" parameterType="int" resultType="com.payment.pojo.UserOrder">
+        SELECT
+            a.order_id as "orderId",
+            a.buyer_id as "buyerId",
+            a.seller_id as "sellerId",
+            a.total_price as "totalPrice",
+            a.item_id as "itemId",
+            a.order_state as "orderState",
+            b.cabin as "itemName",
+            d.`company`  as "sellerName",
+            d.departure_time as "departureTime"
+        FROM
+            user_order a
+                LEFT JOIN flight_class b ON a.item_id = b.class_id
+                LEFT JOIN transaction_flow c ON a.order_id = c.order_id
+                LEFT JOIN flight d ON b.flight_id = d.flight_id
+        WHERE
+            a.seller_id = #{sellerId}
+          and  a.order_state = 3
+    </select>
+
+    <update id="updateOrder" parameterType="int">
+        UPDATE `payment`.`user_order`
+        SET
+            `order_state` = #{finish}
+        WHERE
+            `order_id` = #{orderId}
+    </update>
+
+    <select id="findByOrderId" parameterType="Integer" resultType="com.payment.pojo.UserOrder">
+        SELECT
+            a.order_id as "orderId",
+            a.buyer_id as "buyerId",
+            a.seller_id as "sellerId",
+            a.total_price as "totalPrice",
+            a.item_id as "itemId",
+            a.order_state as "orderState",
+            b.cabin as "itemName",
+            d.`company`  as "sellerName",
+            d.departure_time as "departureTime"
+        FROM
+            user_order a
+                LEFT JOIN flight_class b ON a.item_id = b.class_id
+                LEFT JOIN transaction_flow c ON a.order_id = c.order_id
+                LEFT JOIN flight d ON b.flight_id = d.flight_id
+        WHERE
+            a.order_id = #{orderId}
+    </select>
+</mapper>
