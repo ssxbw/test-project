@@ -32,7 +32,7 @@ Object.keys(custom).forEach(key => {
 router.beforeEach((to, from, next) => {
   if (to.matched.length != 0) {
     if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
-      if (Boolean(localStorage.getItem("userInfo"))) { // 通过vuex state获取当前的user是否存在
+      if (Boolean(localStorage.getItem("token"))) { // 通过vuex state获取当前的user是否存在
         next();
       } else {
         next({
@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
         })
       }
     } else {
-      if (Boolean(localStorage.getItem("userInfo"))) { // 判断是否登录
+      if (Boolean(localStorage.getItem("token"))) { // 判断是否登录
         if (to.path !== "/" && to.path !== "/manager") { //判断是否要跳到登录界面
           next();
         } else {
